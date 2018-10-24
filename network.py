@@ -1,5 +1,8 @@
 from neuron import neuron
 import random
+from keras.datasets import mnist
+import math
+
 class network:
 
     def __init__(self, numLayers, numIn):
@@ -15,7 +18,7 @@ class network:
         for i in laySizes:
             n.append([])
             for j in range(i):
-                n[counter].append(neuron(10))
+                n[counter].append(neuron(-75))
             counter += 1
 
         # n is now declared, neurons have all been initialized.
@@ -46,11 +49,24 @@ class network:
         self.n = n
         self.w = w
     
+    def activate(self, data):
+        if len(data) != len(self.w[0][0]):
+            print("Error, data size not compatible with initialized network. Returning \"none\"")
+            return None
 
+        ins = data
+        sunm = 0
+        out = []
 
-
-
-
-            
-
-network(3, 784)
+        for i in range(len(self.w)):
+            out = []
+            for j in range(len(self.w[i])):
+                sum = 0
+                for k in range(len(self.w[i][j])):
+                    sum += ins[k] * self.w[i][j][k]
+                sum += self.n[i][j].b
+                sum = 1 / (1 + math.e ** (0 - sum))
+                out.append(sum)
+            ins = out
+        
+        return out
