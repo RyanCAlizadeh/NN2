@@ -5,11 +5,11 @@ import math
 
 class network:
 
-    def __init__(self, numLayers, numIn):
+    def __init__(self, numLayers, numIn, hidLaySize, outLaySize):
         laySizes = []
         for i in range(numLayers - 1):
-            laySizes.append(int(input("Size of layer " + str(i) + ": ")))
-        laySizes.append(int(input("Size of output layer: ")))
+            laySizes.append(hidLaySize)
+        laySizes.append(outLaySize)
         counter = 0
 
         w = []
