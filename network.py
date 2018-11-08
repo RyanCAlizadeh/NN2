@@ -50,7 +50,9 @@ class network:
         self.w = w
     
     def activate(self, data):
-        if len(data) != len(self.w[0][0]):
+        print(len(data) * len(data[0]))
+        print(len(self.w[0][0]))
+        if len(data) * len(data[0]) != len(self.w[0][0]):
             print("Error, data size not compatible with initialized network. Returning \"none\"")
             return None
 
@@ -68,5 +70,4 @@ class network:
                 sum = 1 / (1 + math.e ** (0 - sum))
                 out.append(sum)
             ins = out
-        
         return out

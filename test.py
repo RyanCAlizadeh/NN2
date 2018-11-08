@@ -1,3 +1,7 @@
+"""
+This is not a part of my project, it is simply a workspace for me to experiment in and test idea's before implementing them in the main project. 
+"""
+
 import sys
 import numpy
 from keras.datasets import mnist
