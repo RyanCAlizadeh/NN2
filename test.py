@@ -2,6 +2,17 @@
 This is not a part of my project, it is simply a workspace for me to experiment in and test idea's before implementing them in the main project. 
 """
 
+a = [0]
+n = 10
+a = a * n
+
+b = [1]
+n = 10
+b = b * n
+
+print(a + b)
+
+"""
 import sys
 import numpy
 from keras.datasets import mnist
@@ -49,3 +60,4 @@ model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_s
 scores = model.evaluate(X_test, y_test, verbose=0)
 print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
+"""

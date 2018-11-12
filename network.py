@@ -18,7 +18,7 @@ class network:
         for i in laySizes:
             n.append([])
             for j in range(i):
-                n[counter].append(neuron(-75))
+                n[counter].append(neuron(0.0001))
             counter += 1
 
         # n is now declared, neurons have all been initialized.
@@ -32,7 +32,7 @@ class network:
         for i in range(len(n[0])):# Independantly declare weight between n[0] and inputs
             w[0].append([])
             for j in range(numIn):
-                w[0][i].append(random.random() * 10)
+                w[0][i].append(random.random() * random.choice([-1, 1]) * (1/math.sqrt(numIn)))
 
         for i in range(len(n)):     # i is a layer index of n
             if i != 0:              # we have already done n[0]
@@ -40,9 +40,9 @@ class network:
                 for j in range(len(n[i])):      # j is a neuron
                     w[i].append([])
                     for k in n[i-1]:
-                        w[i][j].append(random.random() * 10)
+                        w[i][j].append(random.random() * random.choice([-1, 1]) * (1/math.sqrt(len(n[i-1]))))
 
-        # w is now declared, all weights have been initialized with random values
+        # w is now declared, all weights have been initialized with random values from -1/d to 1/d
         # Access weight between neuron n[L][i1] and n[L - 1][i2]:
         # w[L][i1][i2]
 
@@ -50,24 +50,25 @@ class network:
         self.w = w
     
     def activate(self, data):
-        print(len(data) * len(data[0]))
-        print(len(self.w[0][0]))
         if len(data) * len(data[0]) != len(self.w[0][0]):
             print("Error, data size not compatible with initialized network. Returning \"none\"")
             return None
 
-        ins = data
+        ins = []
+        for i in data:
+            for j in i:
+                ins.append(j)
         sunm = 0
         out = []
 
-        for i in range(len(self.w)):
+        for layer in range(len(self.w)):
             out = []
-            for j in range(len(self.w[i])):
+            for j in range(len(self.w[layer])):
                 sum = 0
-                for k in range(len(self.w[i][j])):
-                    sum += ins[k] * self.w[i][j][k]
-                sum += self.n[i][j].b
+                for k in range(len(self.w[layer][j])):
+                    sum += ins[k] * self.w[layer][j][k]
+                sum += self.n[layer][j].b
                 sum = 1 / (1 + math.e ** (0 - sum))
-                out.append(sum)
+                out.append(round(sum, 4))
             ins = out
         return out
