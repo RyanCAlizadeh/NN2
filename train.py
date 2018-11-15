@@ -9,15 +9,10 @@ for i in xtrain:
 ytrain = ytrain.tolist()
 
 nets = []
-
-"""
-hidLaySize = int(input("Size of layer " + str(i) + ": "))
-outLaySize = int(input("Size of ouput layer: "))
-"""
-
+rate = float(input("Learning Rate: "))
 
 for i in range(10):
-    nets.append(network(3, 784, 16, 10))
+    nets.append(network(3, 784, 16, 10, rate))
 
 # nets contain 10 unique networks. we will run them each on 10 training cases
 
@@ -25,50 +20,52 @@ prev = 0
 next = 10
 
 
-costs = []
-for net in nets:
-    totsum = 0
-    for i in range(prev, next):
-        geuss = net.activate(xtrain[i])
-        
-        print(geuss)
-        print("break")
-        print(ytrain[i])
+while next <= len(xtrain):
+    costs = []
+    for net in nets:
+        totsum = 0
+        for i in range(prev, next):
+            geuss = net.activate(xtrain[i])
 
-        yans = [0] * 10
-        yans[ytrain[i]] = 1
-        cost = 0
-        print(yans)
+            yans = [0] * 10
+            yans[ytrain[i]] = 1
+            cost = 0
 
-        for j in range(len(yans)):
-            cost += abs(geuss[j] - yans[j])
-            print(geuss[j], yans[j])
-        print("cost?", cost)
-        cost = cost ** 2
-        totsum += cost
-        print("cost:", cost)
-        
-    # end of individual net 10 tests
-    print(prev-next)
-    costs.append(totsum / 10)
-# end of cycle through nets
-next += 10
-prev += 10
+            for j in range(len(yans)):
+                cost += abs(geuss[j] - yans[j])
+            cost = cost ** 2
+            totsum += cost
 
-flab = 0
-slab = 0
-first = None
-secon = None
-min1 = 82
-min2 = 82
-for i in range(len(costs) - 1):
-    if costs[i] <= min1:
-        secon = first
-        first = nets[i]
-        slab = flab
-        flab = i
-print("Net:", flab, "came first  with cost:", costs[flab])
-print("Net:", slab, "came second with cost:", costs[slab])
-# end of game, top contestents move onto next game
-for i in costs:
-    print(i)
+        # end of individual net 10 tests
+        costs.append(totsum / 10)
+    # end of cycle through nets
+
+    for i in range(len(costs)):
+        print(i, costs[i])
+
+    firsec = [0, 1]
+    copcost = costs.copy()
+    costs.sort()
+    for i in [0, 1]:
+        for j in range(len(copcost)):
+            if copcost[j] == costs[i]:
+                firsec[i] = j
+
+    print("Net:", firsec[0], "came first  with cost:  ", costs[0])
+    print("Net:", firsec[1], "came second with cost:  ", costs[1])
+    # end of game, top contestents move onto next game
+
+    newNets = []
+    for i in firsec:
+        newNets.append(nets[i])
+
+        for j in range(4):
+            newNet = network(3, 784, 16, 10, rate)
+            newNet.n, newNet.w = nets[i].mutate()
+            newNets.append(newNet)
+    print(nets)
+    nets = newNets.copy()
+    print(newNets)
+
+    next += 10
+    prev += 10

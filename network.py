@@ -5,7 +5,7 @@ import math
 
 class network:
 
-    def __init__(self, numLayers, numIn, hidLaySize, outLaySize):
+    def __init__(self, numLayers, numIn, hidLaySize, outLaySize, rate):
         laySizes = []
         for i in range(numLayers - 1):
             laySizes.append(hidLaySize)
@@ -46,6 +46,9 @@ class network:
         # Access weight between neuron n[L][i1] and n[L - 1][i2]:
         # w[L][i1][i2]
 
+        # Now declare learning rate (scale of mutation)
+
+        self.rate = rate
         self.n = n
         self.w = w
     
@@ -72,3 +75,16 @@ class network:
                 out.append(round(sum, 4))
             ins = out
         return out
+
+    def mutate(self):
+        n = self.n.copy()
+        w = self.w.copy()
+
+        for layer in n:
+            for neuro in layer:
+                neuro.b += random.choice([1, -1]) * random.random() * self.rate
+        for layer in w:
+            for inNeu in layer:
+                for weights in inNeu:
+                    weights += random.choice([1, -1]) * random.random() * self.rate
+        return n, w
