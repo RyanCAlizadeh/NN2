@@ -1,15 +1,41 @@
 from keras.datasets import mnist
 from network import network
 from neuron import neuron
+from layer import layer
+# Load Data
 (xtrain, ytrain), (xtest, ytest) = mnist.load_data()
 
+# Format data as simple python lists
 xformat = []
 for i in xtrain:
     xformat.append(i.flatten().tolist())
+xtrain = xformat
 ytrain = ytrain.tolist()
 
-nets = []
+# Set Learning rate
 rate = float(input("Learning Rate: "))
+
+# Initialize Network instance
+net = network(4, 784, 16, 10, rate)
+
+print(net.activate(xtrain[0]))
+
+
+
+
+# -----------------------------------------------
+# ------------------ARCHIVE----------------------
+# -----------------------------------------------
+
+
+
+"""
+
+# This is some garbage code i made for like genetic algorithms or whatever, i thought i would try it but its super complicated
+# For now i will leave the code.
+# I might archive this soon
+
+nets = []
 
 for i in range(10):
     nets.append(network(3, 784, 16, 10, rate))
@@ -69,3 +95,4 @@ while next <= len(xtrain):
 
     next += 10
     prev += 10
+"""

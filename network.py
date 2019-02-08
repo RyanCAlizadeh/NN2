@@ -1,30 +1,52 @@
 from neuron import neuron
+from layer import layer
 import random
-from keras.datasets import mnist
 import math
-
 class network:
 
     def __init__(self, numLayers, numIn, hidLaySize, outLaySize, rate):
-        laySizes = []
-        for i in range(numLayers - 1):
-            laySizes.append(hidLaySize)
-        laySizes.append(outLaySize)
-        counter = 0
+        layers = []
+        layers.append(layer(hidLaySize, numIn))
+        for lay in range(1, numLayers-1):
+            layers.append(layer(hidLaySize, hidLaySize))
+        layers.append(layer(outLaySize, hidLaySize))
 
-        w = []
-        n = []
+        self.layers     = layers
+        self.numLayers  = numLayers
+        self.numIn      = numIn
+        self.hidLaySize = hidLaySize
+        self.outLaySize = outLaySize
+        self.rate       = rate
 
-        for i in laySizes:
-            n.append([])
-            for j in range(i):
-                n[counter].append(neuron(0.0001))
-            counter += 1
+    def activate(self, data):
+        if len(data) != self.numIn:
+            print("Error: Data size inconsistent with Network input size")
+            return None
 
-        # n is now declared, neurons have all been initialized.
-        # L = layer
-        # i = index in layer
-        # Access specific neuron at n[L][i]
+        self.layers[0].activate(data)
+
+        for i in range(1, self.numLayers):
+            data = []
+            for neu in self.layers[i - 1].neurons:
+                data.append(neu.activation)
+            self.layers[i].activate(data)
+        
+        output = []
+        for i in self.layers[self.numLayers - 1].neurons:
+            output.append(i.activation)
+        return output
+
+
+
+
+
+# -----------------------------------------------
+# ------------------ARCHIVE----------------------
+# -----------------------------------------------
+        
+
+"""
+# Unnecessary for new weighting setup
 
         # Independantly declare weight between n[0] and inputs
 
@@ -47,34 +69,12 @@ class network:
         # w[L][i1][i2]
 
         # Now declare learning rate (scale of mutation)
+"""
 
-        self.rate = rate
-        self.n = n
-        self.w = w
-    
-    def activate(self, data):
-        if len(data) * len(data[0]) != len(self.w[0][0]):
-            print("Error, data size not compatible with initialized network. Returning \"none\"")
-            return None
+        
 
-        ins = []
-        for i in data:
-            for j in i:
-                ins.append(j)
-        sunm = 0
-        out = []
-
-        for layer in range(len(self.w)):
-            out = []
-            for j in range(len(self.w[layer])):
-                sum = 0
-                for k in range(len(self.w[layer][j])):
-                    sum += ins[k] * self.w[layer][j][k]
-                sum += self.n[layer][j].b
-                sum = 1 / (1 + math.e ** (0 - sum))
-                out.append(round(sum, 4))
-            ins = out
-        return out
+"""
+# unnecessary for backprop
 
     def mutate(self):
         n = self.n.copy()
@@ -88,3 +88,4 @@ class network:
                 for weights in inNeu:
                     weights += random.choice([1, -1]) * random.random() * self.rate
         return n, w
+"""
