@@ -34,7 +34,16 @@ class network:
         output = []
         for i in self.layers[self.numLayers - 1].neurons:
             output.append(i.activation)
+        self.out = output
         return output
+
+    def cost(self, data, yhat):
+        y = self.activate(data)
+        sum = 0
+        for i in range(len(y)):
+            sum += 0.5 * ( ( yhat[i] - y[i] ) ** 2)
+        sum /= len(y)
+        return sum
 
 
 

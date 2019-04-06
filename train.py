@@ -2,6 +2,7 @@ from keras.datasets import mnist
 from network import network
 from neuron import neuron
 from layer import layer
+import math
 # Load Data
 (xtrain, ytrain), (xtest, ytest) = mnist.load_data()
 
@@ -12,14 +13,45 @@ for i in xtrain:
 xtrain = xformat
 ytrain = ytrain.tolist()
 
-# Set Learning rate
-rate = float(input("Learning Rate: "))
+def sigmoid(x):
+    return 1 / (1 + math.e ** (0 - x))
+            
+def sigmoid_(x):
+    return sigmoid(x) * ( 1 - sigmoid(x) )
+
 
 # Initialize Network instance
-net = network(4, 784, 16, 10, rate)
+"""
+numLayers =     input("Number of Layers:      ")
+numIn =         input("Number of inputs:      ")
+hidLaySize =    input("Size of Hidden Layers: ")
+outLaySize =    input("Size of output Layer:  ")
+rate =    float(input("Learning Rate:         "))
+net = network(numLayers, numIn, hidLaySize, outLaySize, rate)
+"""
 
-print(net.activate(xtrain[0]))
+net = network(3, 784, 16, 10, 0.1)
+net_updates = network(3, 784, 16, 10, 0.1)
 
+for image_index in range(len(xtrain) - 1):
+    yhat = [0] * 10
+    yhat[ytrain[image_index]] = 1
+    net.activate(xtrain[image_index])
+    for layer in range(len(net.layers) - 1, 0, -1):
+        newYhat = [0] * len(net.layers[layer - 1].neurons)
+        for neuron_index in range(len(net.layers[layer].neurons) - 1):
+            
+            for weight in range(len(net.layers[layer].neurons[neuron_index].inputWeights) - 1):
+                net.layers[layer - 1]
+                net.layers[layer - 1].neurons[weight]
+                net.layers[layer]
+                net.layers[layer].neurons[neuron_index]
+                yhat[neuron_index]
+
+                del_w = 0.1 * net.layers[layer - 1].neurons[weight].activation * sigmoid_(net.layers[layer].neurons[neuron_index].sum) * (yhat[neuron_index] - net.layers[layer].neurons[neuron_index].activation )
+                del_a = 0.1 * net.layers[layer].neurons[neuron_index].inputWeights[weight] * sigmoid_(net.layers[layer].neurons[neuron_index].sum) * (yhat[neuron_index] - net.layers[layer].neurons[neuron_index].activation )
+                net.layers[layer].neurons[neuron_index].inputWeights[weight] += del_w
+                newYhat[weight] += del_a
 
 
 

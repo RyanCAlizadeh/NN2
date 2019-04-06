@@ -13,6 +13,7 @@ class neuron:
         self.numIn = numIn
 
     
+
     def activate(self, inputValues):
         
         if len(inputValues) != self.numIn:
@@ -26,12 +27,14 @@ class neuron:
 
         sum += self.bias
 
-        sig = 1 / (1 + math.e ** (0 - sum))
+        self.sum = sum
+
+        sig = neuron.sigmoid(sum)
 
         self.activation = sig
-
-
-def sigmoid(x):
-    return 1 / (1 + math.e ** (0 - sum))
-def sigmoid_(x):
-    return sigmoid(x) * ( 1 - sigmoid(x) )
+    
+    def sigmoid(x):
+        return 1 / (1 + math.e ** (0 - x))
+            
+    def sigmoid_(x):
+        return sigmoid(x) * ( 1 - sigmoid(x) )

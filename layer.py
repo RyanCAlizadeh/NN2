@@ -5,7 +5,7 @@ class layer:
         w_initialization = [0 - math.sqrt(1 / numIn), math.sqrt(1 / numIn)]
         neurons = []
         for i in range(size):
-            neurons.append(neuron(0.0001, numIn, w_initialization))
+            neurons.append(neuron(0, numIn, w_initialization))
 
         self.neurons = neurons
         self.size = size
